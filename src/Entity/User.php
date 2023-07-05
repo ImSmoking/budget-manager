@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use App\Trait\TimestampTrait;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -13,8 +14,11 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[UniqueEntity('email', message: 'There is already a user with the email {{ value }}', groups: ['register'])]
 #[UniqueEntity('username', message: 'There is already a user with the username {{ value }}', groups: ['register'])]
+#[ORM\HasLifecycleCallbacks]
 class User implements EntityInterface, UserInterface, PasswordAuthenticatedUserInterface
 {
+    use TimestampTrait;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -78,6 +82,7 @@ class User implements EntityInterface, UserInterface, PasswordAuthenticatedUserI
         )
     ]
     private ?string $rawPassword = null;
+
 
     public function getId(): ?int
     {

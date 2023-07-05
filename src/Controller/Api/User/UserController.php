@@ -23,6 +23,6 @@ class UserController extends ApiController
     public function infoAction(): JsonResponse
     {
         $this->getUser();
-        return $this->getJsonResponse($this->getUser(), ['groups' => 'get']);
+        return $this->getJsonResponse($this->getUser(), ['groups' => ['get', 'timestamp']]);
     }
 }
