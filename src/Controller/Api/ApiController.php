@@ -17,7 +17,7 @@ class ApiController extends AbstractController
     {
     }
 
-    public function getJsonResponse(array $content, array $context = [], int $status = Response::HTTP_OK): JsonResponse
+    public function getJsonResponse(array|object $content, array $context = [], int $status = Response::HTTP_OK): JsonResponse
     {
         if (is_object($content)) {
             $jsonContent = $this->serializer->serialize($content, 'json', $context);
@@ -27,18 +27,5 @@ class ApiController extends AbstractController
         }
 
         return new JsonResponse(['data' => $arrayContent], $status);
-    }
-
-    public function transformJsonContent(Request $request): Request
-    {
-        $data = json_decode($request->getContent(), true);
-
-        if (is_null($data)) {
-            return $request;
-        }
-
-        $request->request->replace($data);
-
-        return $request;
     }
 }

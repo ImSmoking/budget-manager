@@ -4,12 +4,16 @@ namespace App\Entity;
 
 use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
-class User implements UserInterface, PasswordAuthenticatedUserInterface
+#[UniqueEntity('email', message: 'There is already a user with the email {{ value }}', groups: ['register'])]
+#[UniqueEntity('username', message: 'There is already a user with the username {{ value }}', groups: ['register'])]
+class User implements EntityInterface, UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -17,11 +21,35 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?int $id = null;
 
     #[ORM\Column(length: 180, unique: true)]
-    #[Groups(['register', 'login'])]
+    #[Groups(['register', 'login', 'get'])]
+    #[
+        Assert\NotNull(
+            message: 'Username is required.',
+            groups: ['register']
+        ),
+        Assert\NotBlank(
+            message: 'Username is required.',
+            groups: ['register']
+        )
+    ]
     private ?string $username = null;
 
     #[ORM\Column(length: 180, unique: true)]
-    #[Groups(['register'])]
+    #[Groups(['register', 'get'])]
+    #[
+        Assert\Email(
+            message: 'Provided email {{ value }} is not a valid email.',
+            groups: ['register']
+        ),
+        Assert\NotNull(
+            message: 'Email is required.',
+            groups: ['register']
+        ),
+        Assert\NotBlank(
+            message: 'Email is required.',
+            groups: ['register']
+        )
+    ]
     private ?string $email = null;
 
     #[ORM\Column]
@@ -31,8 +59,25 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @var string The hashed password
      */
     #[ORM\Column]
-    #[Groups(['register', 'login'])]
+    #[Groups(['login'])]
     private ?string $password = null;
+
+    #[Groups(['register'])]
+    #[
+        Assert\PasswordStrength(
+            minScore: Assert\PasswordStrength::STRENGTH_WEAK,
+            groups: ['register']
+        ),
+        Assert\NotNull(
+            message: 'Password is required.',
+            groups: ['register']
+        ),
+        Assert\NotBlank(
+            message: 'Password is required.',
+            groups: ['register']
+        )
+    ]
+    private ?string $rawPassword = null;
 
     public function getId(): ?int
     {
@@ -76,6 +121,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @see UserInterface
      */
+
     public function getRoles(): array
     {
         $roles = $this->roles;
@@ -103,6 +149,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setPassword(string $password): static
     {
         $this->password = $password;
+
+        return $this;
+    }
+
+    public function getRawPassword(): ?string
+    {
+        return $this->rawPassword;
+    }
+
+    public function setRawPassword(?string $rawPassword): static
+    {
+        $this->rawPassword = $rawPassword;
 
         return $this;
     }
