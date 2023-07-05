@@ -1,6 +1,13 @@
 {
     "type": "project",
     "license": "proprietary",
+    "authors": [
+        {
+            "name": "Marko Bešlić",
+            "email": "marko.beslic7@gmail.com",
+            "role": "Owner"
+        }
+    ],
     "minimum-stability": "stable",
     "prefer-stable": true,
     "require": {
