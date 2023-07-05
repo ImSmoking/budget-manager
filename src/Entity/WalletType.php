@@ -6,7 +6,7 @@ use App\Repository\WalletTypeRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: WalletTypeRepository::class)]
-class WalletType
+class WalletType implements EntityInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]

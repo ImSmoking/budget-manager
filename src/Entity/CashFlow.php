@@ -8,7 +8,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: CashFlowRepository::class)]
-class CashFlow
+class CashFlow implements EntityInterface
 {
     use TimestampTrait;
 

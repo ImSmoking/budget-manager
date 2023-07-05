@@ -6,7 +6,7 @@ use App\Repository\CurrencyRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: CurrencyRepository::class)]
-class Currency
+class Currency implements EntityInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
