@@ -20,7 +20,15 @@ class UserController extends ApiController
     #[OA\Response(
         response: 200,
         description: "JSON Body",
-        content: new Model(type: User::class, groups: ['user:get', 'timestamp'])
+        content: new OA\JsonContent(
+            properties: [
+                new OA\Property(
+                    property: 'data',
+                    ref: new Model(type: User::class, groups: ['user:get', 'timestamp']),
+                    type: 'object'
+                )
+            ]
+        )
     )]
     public function infoAction(): JsonResponse
     {
