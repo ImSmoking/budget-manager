@@ -21,7 +21,7 @@ class AuthenticationController extends ApiController
     #[OA\RequestBody(
         description: "JSON Body",
         required: true,
-        content: new Model(type: User::class, groups: ['login'])
+        content: new Model(type: User::class, groups: ['user:login'])
     )]
     public function getTokenAction(UserInterface $user, JWTTokenManagerInterface $JWTTokenManager): JsonResponse
     {

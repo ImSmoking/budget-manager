@@ -20,11 +20,11 @@ class UserController extends ApiController
     #[OA\Response(
         response: 200,
         description: "JSON Body",
-        content: new Model(type: User::class, groups: ['get'])
+        content: new Model(type: User::class, groups: ['user:get', 'timestamp'])
     )]
     public function infoAction(): JsonResponse
     {
         $this->getUser();
-        return $this->getJsonResponse($this->getUser(), ['groups' => ['get', 'timestamp']]);
+        return $this->getJsonResponse($this->getUser(), ['groups' => ['user:get', 'timestamp']]);
     }
 }

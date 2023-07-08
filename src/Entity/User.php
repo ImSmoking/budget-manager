@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Constant\UserRoles;
 use App\Repository\UserRepository;
 use App\Trait\TimestampTrait;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -14,10 +15,11 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
+use OpenApi\Attributes as OA;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
-#[UniqueEntity('email', message: 'There is already a user with the email {{ value }}', groups: ['register'])]
-#[UniqueEntity('username', message: 'There is already a user with the username {{ value }}', groups: ['register'])]
+#[UniqueEntity('email', message: 'There is already a user with the email {{ value }}', groups: ['user:register'])]
+#[UniqueEntity('username', message: 'There is already a user with the username {{ value }}', groups: ['user:register'])]
 #[ORM\HasLifecycleCallbacks]
 class User implements EntityInterface, UserInterface, PasswordAuthenticatedUserInterface
 {
@@ -29,60 +31,60 @@ class User implements EntityInterface, UserInterface, PasswordAuthenticatedUserI
     private ?int $id = null;
 
     #[ORM\Column(length: 180, unique: true)]
-    #[Groups(['register', 'login', 'get'])]
+    #[Groups(['user:register', 'user:login', 'user:get'])]
     #[
         Assert\NotNull(
             message: 'Username is required.',
-            groups: ['register']
+            groups: ['user:register']
         ),
         Assert\NotBlank(
             message: 'Username is required.',
-            groups: ['register']
+            groups: ['user:register']
         )
     ]
     private ?string $username = null;
 
     #[ORM\Column(length: 180, unique: true)]
-    #[Groups(['register', 'get'])]
+    #[Groups(['user:register', 'user:get'])]
     #[
         Assert\Email(
             message: 'Provided email {{ value }} is not a valid email.',
-            groups: ['register']
+            groups: ['user:register']
         ),
         Assert\NotNull(
             message: 'Email is required.',
-            groups: ['register']
+            groups: ['user:register']
         ),
         Assert\NotBlank(
             message: 'Email is required.',
-            groups: ['register']
+            groups: ['user:register']
         )
     ]
     private ?string $email = null;
 
     #[ORM\Column]
-    private array $roles = [];
+    private array $roles = [UserRoles::DEFAULT_ROLE];
 
     /**
      * @var string The hashed password
      */
     #[ORM\Column]
-    #[Groups(['login'])]
+    #[Groups(['user:login'])]
     private ?string $password = null;
 
-    #[Groups(['register'])]
+    #[Groups(['user:register'])]
     #[
         Assert\PasswordStrength(
             minScore: Assert\PasswordStrength::STRENGTH_WEAK,
-            groups: ['register']
+            groups: ['user:register']
         ),
         Assert\NotNull(
             message: 'Password is required.',
-            groups: ['register']
+            groups: ['user:register']
         ),
         Assert\NotBlank(
             message: 'Password is required.',
-            groups: ['register']
+            groups: ['user:register']
         )
     ]
     private ?string $rawPassword = null;

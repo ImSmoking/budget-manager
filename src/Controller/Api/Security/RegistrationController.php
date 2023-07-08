@@ -21,7 +21,7 @@ class RegistrationController extends ApiController
     #[OA\RequestBody(
         description: "JSON Body",
         required: true,
-        content: new Model(type: User::class, groups: ['register'])
+        content: new Model(type: User::class, groups: ['user:register'])
     )]
     public function registerAction(
         Request                 $request,

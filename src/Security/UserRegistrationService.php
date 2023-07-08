@@ -26,7 +26,7 @@ class UserRegistrationService
         $jsonContent = $request->getContent();
 
         /** @var User $user */
-        $user = $this->entityFactory->createFromJson($jsonContent, User::class, ['register']);
+        $user = $this->entityFactory->createFromJson($jsonContent, User::class, ['user:register']);
 
         $rawPassword = $user->getRawPassword();
         $user->setRoles([UserRoles::USER]);

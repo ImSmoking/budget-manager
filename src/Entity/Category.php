@@ -17,30 +17,30 @@ class Category implements EntityInterface
     #[ORM\Column]
     private ?int $id = null;
 
-    #[Groups(['create', 'get'])]
+    #[Groups(['category:create', 'category:get'])]
     #[ORM\Column(length: 255)]
     #[
         Assert\NotNull(
             message: 'Name is required.',
-            groups: ['create']
+            groups: ['category:create']
         ),
         Assert\NotBlank(
             message: 'Name is required.',
-            groups: ['create']
+            groups: ['category:create']
         )
     ]
     private ?string $name = null;
 
-    #[Groups(['create', 'get'])]
+    #[Groups(['category:create', 'category:get'])]
     #[ORM\Column(length: 9, nullable: true)]
     #[
         Assert\NotNull(
             message: 'Name is required.',
-            groups: ['create']
+            groups: ['category:create']
         ),
         Assert\NotBlank(
             message: 'Name is required.',
-            groups: ['create']
+            groups: ['category:create']
         )
     ]
     private ?string $colorHex = null;

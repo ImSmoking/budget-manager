@@ -23,7 +23,7 @@ class CategoryController extends ApiController
     #[OA\RequestBody(
         description: "JSON Body",
         required: true,
-        content: new Model(type: Category::class, groups: ['create'])
+        content: new Model(type: Category::class, groups: ['category:create'])
     )]
     public function createAction(
         Request            $request,
@@ -33,10 +33,10 @@ class CategoryController extends ApiController
     {
         $content = $request->getContent();
         /** @var Category $category */
-        $category = $entityFactory->createFromJson($content, Category::class, ['create']);
+        $category = $entityFactory->createFromJson($content, Category::class, ['category:create']);
         $categoryRepository->save($category, true);
 
-        return $this->getJsonResponse($category, ['groups' => ['create']]);
+        return $this->getJsonResponse($category, ['groups' => ['category:create']]);
 
     }
 
@@ -45,10 +45,10 @@ class CategoryController extends ApiController
     #[OA\Response(
         response: 200,
         description: "JSON Body",
-        content: new Model(type: Category::class, groups: ['get'])
+        content: new Model(type: Category::class, groups: ['category:get'])
     )]
     public function getAction(Category $category): JsonResponse
     {
-        return $this->getJsonResponse($category, ['groups' => ['get']]);
+        return $this->getJsonResponse($category, ['groups' => ['category:get']]);
     }
 }
