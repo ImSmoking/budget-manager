@@ -31,11 +31,11 @@ class CurrencyFixtures extends Fixture
     public function load(ObjectManager $manager): void
     {
         foreach ($this->fixtures as $fixture) {
-            $category = (new Currency())
+            $currency = (new Currency())
                 ->setName($fixture['name'])
                 ->setCode($fixture['code']);
 
-            $manager->persist($category);
+            $manager->persist($currency);
         }
         $manager->flush();
     }

@@ -17,7 +17,7 @@ use Symfony\Component\Routing\Requirement\Requirement;
 #[Route('/currency', name: 'api_currency_')]
 class CurrencyController extends ApiController
 {
-    #[Route('/get/{id}', name: 'get', requirements: ['page' => Requirement::DIGITS], methods: ['GET'])]
+    #[Route('/get/{id}', name: 'get', requirements: ['id' => Requirement::DIGITS], methods: ['GET'])]
     #[
         OA\Get(summary: "Currency by ID", tags: ['Currency']),
         OA\Response(
