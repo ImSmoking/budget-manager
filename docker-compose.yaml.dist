@@ -3,6 +3,8 @@ version: '3.5'
 networks:
   budget_manager:
     name: budget_manager
+#  local:
+#    name: local
 
 services:
 
@@ -29,11 +31,12 @@ services:
       - './.docker-config/nginx/conf.d/nginx.conf:/etc/nginx/conf.d/docker-nginx.conf:ro'
     environment:
         WORK_DIR: '/app/'
+#        VIRTUAL_HOST: '${HOST}'
     ports:
       - 8000:80
     networks:
       - budget_manager
-
+#      - local
   db:
     container_name: "${PROJECT}_db"
     image: mysql:8.0
