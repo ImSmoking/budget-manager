@@ -2,6 +2,7 @@
 
 namespace App\Security;
 
+use App\Constant\UserRoles;
 use App\Entity\User;
 use App\Factory\EntityFactory;
 use App\Repository\UserRepository;
@@ -26,6 +27,7 @@ class UserRegistrationService
         $user = $this->entityFactory->createFromJson($jsonContent, User::class, ['register']);
 
         $rawPassword = $user->getRawPassword();
+        $user->setRoles([UserRoles::USER]);
         $hashedPassword = $this->userPasswordHasher->hashPassword($user, $rawPassword);
         $user->setPassword($hashedPassword);
 
