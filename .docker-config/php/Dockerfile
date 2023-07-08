@@ -44,3 +44,4 @@ RUN echo 'deb [trusted=yes] https://repo.symfony.com/apt/ /' | tee /etc/apt/sour
 RUN chown -R appuser:appuser /app
 USER appuser
 COPY setup.sh /home/appuser/
+COPY setup_test_db.sh /home/appuser/

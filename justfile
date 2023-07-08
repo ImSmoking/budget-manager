@@ -47,3 +47,9 @@ teardown:
     rm -rf vendor
     rm docker-compose.yaml
     rm .env.local
+
+
+run-tests:
+    docker-compose exec php /bin/bash /home/appuser/setup_test_db.sh
+    docker-compose exec php composer run-tests
+    docker-compose exec php /bin/bash /home/appuser/setup_test_db.sh
