@@ -58,7 +58,7 @@ class CategoryController extends ApiController
     ): JsonResponse
     {
         $category = $this->categoryCrudService->createFromRequest($request);
-        return $this->getJsonResponse($category, ['groups' => ['category:create']], Response::HTTP_CREATED);
+        return $this->getJsonResponse($category, ['groups' => ['category:get']], Response::HTTP_CREATED);
     }
 
     #[Route('/update/{id}', name: 'update', methods: ['PUT'])]
@@ -89,14 +89,14 @@ class CategoryController extends ApiController
     ): JsonResponse
     {
         $category = $this->categoryCrudService->updateFromRequest($category, $request);
-        return $this->getJsonResponse($category, ['groups' => ['category:create']]);
+        return $this->getJsonResponse($category, ['groups' => ['category:get']]);
     }
 
     #[Route('/get/{id}', name: 'get', methods: ['GET'])]
     #[
         OA\Get(summary: "Category by ID", tags: ['Category']),
         OA\Response(
-            response: 200,
+            response: Response::HTTP_OK,
             description: "Single Category JSON item",
             content: new Model(type: Category::class, groups: ['category:get'])
         )
