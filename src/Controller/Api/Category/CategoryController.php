@@ -6,7 +6,6 @@ namespace App\Controller\Api\Category;
 
 use App\Controller\Api\ApiController;
 use App\Entity\Category;
-use App\Factory\EntityFactory;
 use App\Repository\CategoryRepository;
 use App\Service\CategoryCrudService;
 use Nelmio\ApiDocBundle\Annotation\Model;
@@ -15,11 +14,22 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use OpenApi\Attributes as OA;
-use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
+use Symfony\Component\Serializer\SerializerInterface;
 
 #[Route('/category', name: 'api_category_')]
 class CategoryController extends ApiController
 {
+
+    private CategoryCrudService $categoryCrudService;
+
+    public function __construct(
+        SerializerInterface $serializer,
+        CategoryCrudService $categoryCrudService
+    )
+    {
+        parent::__construct($serializer);
+        $this->categoryCrudService = $categoryCrudService;
+    }
 
     #[Route('/create', name: 'create', methods: ['POST'])]
     #[
@@ -44,11 +54,10 @@ class CategoryController extends ApiController
         )
     ]
     public function createAction(
-        Request             $request,
-        CategoryCrudService $categoryCrudService
+        Request             $request
     ): JsonResponse
     {
-        $category = $categoryCrudService->createFromRequest($request);
+        $category = $this->categoryCrudService->createFromRequest($request);
         return $this->getJsonResponse($category, ['groups' => ['category:create']], Response::HTTP_CREATED);
     }
 
@@ -76,11 +85,10 @@ class CategoryController extends ApiController
     ]
     public function updateAction(
         Category            $category,
-        Request             $request,
-        CategoryCrudService $categoryCrudService
+        Request             $request
     ): JsonResponse
     {
-        $category = $categoryCrudService->updateFromRequest($category, $request);
+        $category = $this->categoryCrudService->updateFromRequest($category, $request);
         return $this->getJsonResponse($category, ['groups' => ['category:create']]);
     }
 
@@ -96,6 +104,20 @@ class CategoryController extends ApiController
     public function getAction(Category $category): JsonResponse
     {
         return $this->getJsonResponse($category, ['groups' => ['category:get']]);
+    }
+
+    #[Route('/delete/{id}', name: 'delete', methods: ['DELETE'])]
+    #[
+        OA\Delete(summary: "Category by ID", tags: ['Category']),
+        OA\Response(
+            response: Response::HTTP_NO_CONTENT,
+            description: "204 No Content"
+        )
+    ]
+    public function deleteAction(Category $category): JsonResponse
+    {
+        $this->categoryCrudService->delete($category);
+        return $this->getJsonResponse([], [], Response::HTTP_NO_CONTENT);
     }
 
     #[Route('/list', name: 'list', methods: ['GET'])]
@@ -119,19 +141,5 @@ class CategoryController extends ApiController
     {
         $categories = $categoryRepository->findAll();
         return $this->getJsonResponse($categories, ['groups' => ['category:get']]);
-    }
-
-    #[Route('/delete/{id}', name: 'delete', methods: ['DELETE'])]
-    #[
-        OA\Delete(summary: "Category by ID", tags: ['Category']),
-        OA\Response(
-            response: Response::HTTP_NO_CONTENT,
-            description: "204 No Content"
-        )
-    ]
-    public function deleteAction(Category $category, CategoryRepository $categoryRepository): JsonResponse
-    {
-        $categoryRepository->remove($category, true);
-        return $this->getJsonResponse([], [], Response::HTTP_NO_CONTENT);
     }
 }

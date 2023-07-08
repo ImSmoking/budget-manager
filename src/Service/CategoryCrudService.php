@@ -42,4 +42,9 @@ class CategoryCrudService
 
         return $categoryUpdated;
     }
+
+    public function delete(Category $category): void
+    {
+        $this->categoryRepository->remove($category, true);
+    }
 }
