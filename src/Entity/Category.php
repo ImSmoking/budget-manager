@@ -15,6 +15,7 @@ class Category implements EntityInterface
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['category:get'])]
     private ?int $id = null;
 
     #[Groups(['category:create', 'category:get'])]

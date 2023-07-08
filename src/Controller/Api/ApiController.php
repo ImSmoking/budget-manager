@@ -12,7 +12,6 @@ use Symfony\Component\Serializer\SerializerInterface;
 
 class ApiController extends AbstractController
 {
-
     public function __construct(
         private readonly SerializerInterface $serializer
     )
@@ -21,12 +20,8 @@ class ApiController extends AbstractController
 
     public function getJsonResponse(array|object $content, array $context = [], int $status = Response::HTTP_OK): JsonResponse
     {
-        if (is_object($content)) {
-            $jsonContent = $this->serializer->serialize($content, 'json', $context);
-            $arrayContent = json_decode($jsonContent, true);
-        } else {
-            $arrayContent = $content;
-        }
+        $jsonContent = $this->serializer->serialize($content, 'json', $context);
+        $arrayContent = json_decode($jsonContent, true);
 
         return new JsonResponse(['data' => $arrayContent], $status);
     }

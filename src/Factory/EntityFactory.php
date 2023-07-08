@@ -12,19 +12,23 @@ final class EntityFactory
 {
     public function __construct(
         private readonly SerializerInterface $serializer,
-        private readonly ValidationService  $validator
+        private readonly ValidationService   $validator
     )
     {
     }
 
-    public function createFromJson(string $data, string $class, array $groups = []): EntityInterface
+    public function createFromJson(string $data, string $class, array $groups = [], array $context = []): EntityInterface
     {
-        return $this->create($data, $class, 'json', $groups);
+        return $this->create($data, $class, 'json', $groups, $context);
     }
 
-    private function create(string|array $data, string $class, string $format, array $groups): EntityInterface
+    private function create(string|array $data, string $class, string $format, array $groups = [], array $context = []): EntityInterface
     {
-        $entity = $this->serializer->deserialize($data, $class, $format, $groups);
+        if (!empty($groups)) {
+            $context['groups'] = $groups;
+        }
+
+        $entity = $this->serializer->deserialize($data, $class, $format, $context);
         $this->validator->validate($entity, $groups);
 
         return $entity;

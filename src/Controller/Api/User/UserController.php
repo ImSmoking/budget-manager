@@ -16,7 +16,7 @@ class UserController extends ApiController
 {
 
     #[Route('/info', name: 'info', methods: ['GET'])]
-    #[OA\GET(summary: "User info", tags: ['User'])]
+    #[OA\Get(summary: "User info", tags: ['User'])]
     #[OA\Response(
         response: 200,
         description: "JSON Body",
