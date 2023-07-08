@@ -8,6 +8,7 @@ use App\Repository\CategoryRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
+use App\Validator as CustomAssert;
 
 #[ORM\Entity(repositoryClass: CategoryRepository::class)]
 class Category implements EntityInterface
@@ -42,7 +43,8 @@ class Category implements EntityInterface
         Assert\NotBlank(
             message: 'Name is required.',
             groups: ['category:create']
-        )
+        ),
+        CustomAssert\HexColorCode(groups: ['category:create'])
     ]
     private ?string $colorHex = null;
 
