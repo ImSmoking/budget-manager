@@ -63,7 +63,7 @@ class User implements EntityInterface, UserInterface, PasswordAuthenticatedUserI
     private ?string $email = null;
 
     #[ORM\Column]
-    private array $roles = [UserRoles::DEFAULT_ROLE];
+    private array $roles = UserRoles::DEFAULT_ROLES;
 
     /**
      * @var string The hashed password
