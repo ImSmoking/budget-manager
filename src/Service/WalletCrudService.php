@@ -8,13 +8,15 @@ use App\Entity\Wallet;
 use App\Factory\EntityFactory;
 use App\Repository\WalletRepository;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 
 class WalletCrudService
 {
     public function __construct(
-        private readonly WalletRepository $walletRepository,
-        private readonly EntityFactory    $entityFactory
+        private readonly WalletRepository      $walletRepository,
+        private readonly EntityFactory         $entityFactory,
+        private readonly TokenStorageInterface $tokenStorage
     )
     {
     }
@@ -24,6 +26,7 @@ class WalletCrudService
         $contentJson = $request->getContent();
         /** @var Wallet $wallet */
         $wallet = $this->entityFactory->createFromJson($contentJson, Wallet::class, ['wallet:create']);
+        $wallet->setUser($this->tokenStorage->getToken()->getUser());
         $this->walletRepository->save($wallet, true);
 
         return $wallet;

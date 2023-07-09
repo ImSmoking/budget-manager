@@ -26,13 +26,7 @@ class Wallet implements EntityInterface
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'wallets')]
-    #[Groups(['wallet:get', 'wallet:create'])]
-    #[
-        Assert\NotNull(
-            message: 'User is required.',
-            groups: ['wallet:create']
-        )
-    ]
+    #[Groups(['wallet:get'])]
     private ?User $user = null;
 
     #[ORM\Column(length: 255)]

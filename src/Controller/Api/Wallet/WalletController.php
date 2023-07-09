@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace App\Controller\Api\Wallet;
 
+use App\Constant\UserRoles;
 use App\Controller\Api\ApiController;
 use App\Entity\Wallet;
 use App\Repository\WalletRepository;
+use App\Security\Voter\WalletVoter;
 use App\Service\WalletCrudService;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use OpenApi\Attributes as OA;
@@ -15,6 +17,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Requirement\Requirement;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Serializer\SerializerInterface;
 
 #[Route('/wallet', name: 'api_wallet_')]
@@ -81,6 +84,7 @@ class WalletController extends ApiController
             )
         )
     ]
+    #[IsGranted(WalletVoter::EDIT, 'wallet')]
     public function updateAction(
         Wallet  $wallet,
         Request $request
@@ -107,6 +111,7 @@ class WalletController extends ApiController
             )
         )
     ]
+    #[IsGranted(WalletVoter::VIEW, 'wallet')]
     public function getAction(Wallet $wallet): JsonResponse
     {
         return $this->getJsonResponse($wallet, ['groups' => ['wallet:get', 'currency:get', 'wallet-type:get']]);
@@ -131,8 +136,13 @@ class WalletController extends ApiController
     ]
     public function listAction(WalletRepository $walletRepository): JsonResponse
     {
-        $wallet = $walletRepository->findAll();
-        return $this->getJsonResponse($wallet, ['groups' => ['wallet:get']]);
+        if ($this->getUser()->hasRole(UserRoles::ADMIN)) {
+            $wallets = $walletRepository->findAll();
+        } else {
+            $wallets = $walletRepository->findBy(['user' => $this->getUser()]);
+        }
+
+        return $this->getJsonResponse($wallets, ['groups' => ['wallet:get']]);
     }
 
     #[Route('/delete/{id}', name: 'delete', methods: ['DELETE'])]
@@ -143,6 +153,7 @@ class WalletController extends ApiController
             description: "204 No Content"
         )
     ]
+    #[IsGranted(WalletVoter::DELETE, 'wallet')]
     public function deleteAction(Wallet $wallet): JsonResponse
     {
         $this->walletCrudService->delete($wallet);

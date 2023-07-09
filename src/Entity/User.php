@@ -157,6 +157,14 @@ class User implements EntityInterface, UserInterface, PasswordAuthenticatedUserI
         return $this;
     }
 
+    public function hasRole(string $role): bool
+    {
+        if (in_array($role, $this->getRoles())) {
+            return true;
+        }
+        return false;
+    }
+
     /**
      * @see PasswordAuthenticatedUserInterface
      */
