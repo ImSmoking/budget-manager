@@ -8,6 +8,7 @@ use App\Constant\CashFlowTypes;
 use App\Controller\Api\ApiController;
 use App\Entity\CashFlow;
 use App\Repository\CashFlowRepository;
+use App\Security\Voter\CashFlowVoter;
 use App\Service\CashFlowCrudService;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -15,6 +16,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use OpenApi\Attributes as OA;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Serializer\SerializerInterface;
 
 class CashFlowController extends ApiController
@@ -79,6 +81,7 @@ class CashFlowController extends ApiController
             )
         )
     ]
+    #[IsGranted(CashFlowVoter::EDIT,'cashFlow')]
     public function updateAction(
         CashFlow $cashFlow,
         Request  $request
@@ -97,6 +100,7 @@ class CashFlowController extends ApiController
             content: new Model(type: CashFlow::class, groups: ['cash_flow:get', 'timestamp', 'category:get', 'wallet:get'])
         )
     ]
+    #[IsGranted(CashFlowVoter::VIEW,'cashFlow')]
     public function getAction(CashFlow $cashFlow): JsonResponse
     {
         return $this->getJsonResponse($cashFlow, ['groups' => ['cash_flow:get', 'timestamp', 'category:get', 'wallet:get']]);
@@ -110,6 +114,7 @@ class CashFlowController extends ApiController
             description: "204 No Content"
         )
     ]
+    #[IsGranted(CashFlowVoter::DELETE,'cashFlow')]
     public function deleteAction(CashFlow $cashFlow): JsonResponse
     {
         $this->cashFlowCrudService->delete($cashFlow);
