@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controller\Api\CashFlow;
 
+use App\Constant\CashFlowTypes;
 use App\Controller\Api\ApiController;
 use App\Entity\CashFlow;
 use App\Repository\CashFlowRepository;
@@ -20,7 +21,7 @@ class CashFlowController extends ApiController
 {
     public function __construct(
         private readonly CashFlowCrudService $cashFlowCrudService,
-        SerializerInterface $serializer
+        SerializerInterface                  $serializer
     )
     {
         parent::__construct($serializer);
@@ -79,8 +80,8 @@ class CashFlowController extends ApiController
         )
     ]
     public function updateAction(
-        CashFlow            $cashFlow,
-        Request             $request
+        CashFlow $cashFlow,
+        Request  $request
     ): JsonResponse
     {
         $cashFlow = $this->cashFlowCrudService->updateFromRequest($cashFlow, $request);
@@ -100,6 +101,7 @@ class CashFlowController extends ApiController
     {
         return $this->getJsonResponse($cashFlow, ['groups' => ['cash_flow:get', 'timestamp', 'category:get', 'wallet:get']]);
     }
+
     #[Route('/delete/{id}', name: 'delete', methods: ['DELETE'])]
     #[
         OA\Delete(summary: "Cash Flow by ID", tags: ['Cash Flow']),
@@ -113,6 +115,7 @@ class CashFlowController extends ApiController
         $this->cashFlowCrudService->delete($cashFlow);
         return $this->getJsonResponse([], [], Response::HTTP_NO_CONTENT);
     }
+
     #[Route('/list', name: 'list', methods: ['GET'])]
     #[
         OA\Get(summary: "All Cash Flows", tags: ['Cash Flow']),
@@ -134,5 +137,14 @@ class CashFlowController extends ApiController
     {
         $cashFlows = $cashFlowRepository->findAll();
         return $this->getJsonResponse($cashFlows, ['groups' => ['cash_flow:get', 'timestamp', 'category:get', 'wallet:get']]);
+    }
+
+    #[Route('/list/types', name: 'list_types', methods: ['GET'])]
+    #[
+        OA\Get(summary: "Valid Cash Flow types", tags: ['Cash Flow']),
+    ]
+    public function listCashFlowTypesAction(): JsonResponse
+    {
+        return $this->getJsonResponse(CashFlowTypes::TYPES_ARRAY);
     }
 }
