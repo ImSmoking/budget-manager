@@ -59,7 +59,7 @@ JWT authentication.
 Written test are placed in the [test](https://github.com/ImSmoking/budget-manager/tree/master/tests) folder.  
 Before they can be run the test database needs to be set up which can be done by running commands  
 `docker-compose exec php bin/console --env=test bin/console doctrine:schema:update --force --complete`,  
-`docker-compose exec php bin/console --env=test doctrine:database:create --if-not-exists`, and
-`docker-compose exec php bin/console --env=test doctrine:fixtures:load --quiet`
+`docker-compose exec php bin/console --env=test doctrine:database:create --if-not-exists`, and  
+`docker-compose exec php bin/console --env=test doctrine:fixtures:load --quiet`  
 
 Once that is done the tests can be run using the `docker-compose exec php composer run-tests` composer script.

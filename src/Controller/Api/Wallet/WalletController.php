@@ -38,7 +38,14 @@ class WalletController extends ApiController
         OA\RequestBody(
             description: "Single Wallet JSON item.",
             required: true,
-            content: new Model(type: Wallet::class, groups: ['wallet:create'])
+            content: new OA\JsonContent(
+                properties: [
+                    new OA\Property(property: 'name', type: 'string', example: 'New Wallet'),
+                    new OA\Property(property: 'balance', type: 'string', example: '1000.00'),
+                    new OA\Property(property: 'currency', type: 'int', example: 1),
+                    new OA\Property(property: 'type', type: 'int', example: 1)
+                ]
+            )
         ),
         OA\Response(
             response: Response::HTTP_CREATED,
@@ -68,7 +75,14 @@ class WalletController extends ApiController
         OA\RequestBody(
             description: "Single Wallet JSON item",
             required: true,
-            content: new Model(type: Wallet::class, groups: ['wallet:update'])
+            content: new OA\JsonContent(
+                properties: [
+                    new OA\Property(property: 'name', type: 'string', example: 'New Wallet'),
+                    new OA\Property(property: 'balance', type: 'string', example: '1000.00'),
+                    new OA\Property(property: 'currency', type: 'int', example: 1),
+                    new OA\Property(property: 'type', type: 'int', example: 1)
+                ]
+            )
         ),
         OA\Response(
             response: Response::HTTP_OK,

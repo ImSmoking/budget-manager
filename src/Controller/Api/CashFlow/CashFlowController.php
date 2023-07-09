@@ -35,7 +35,16 @@ class CashFlowController extends ApiController
         OA\RequestBody(
             description: "Single Cash Flow JSON item.",
             required: true,
-            content: new Model(type: CashFlow::class, groups: ['cash_flow:create'])
+            content: new OA\JsonContent(
+                properties: [
+                    new OA\Property(property: 'type', type: 'string', example: 'expense'),
+                    new OA\Property(property: 'wallet', type: 'int', example: 1),
+                    new OA\Property(property: 'description', type: 'string', example: 'Burger'),
+                    new OA\Property(property: 'amount', type: 'string', example: '5.99'),
+                    new OA\Property(property: 'category', type: 'int', example: 1),
+                    new OA\Property(property: 'dated_at', type: 'datetime', example: '2023-07-01 12:45')
+                ]
+            )
         ),
         OA\Response(
             response: Response::HTTP_CREATED,
@@ -65,7 +74,16 @@ class CashFlowController extends ApiController
         OA\RequestBody(
             description: "Single Cash Flow JSON item",
             required: true,
-            content: new Model(type: CashFlow::class, groups: ['cash_flow:create', 'category:get'])
+            content: new OA\JsonContent(
+                properties: [
+                    new OA\Property(property: 'type', type: 'string', example: 'expense'),
+                    new OA\Property(property: 'wallet', type: 'int', example: 1),
+                    new OA\Property(property: 'description', type: 'string', example: 'Burger'),
+                    new OA\Property(property: 'amount', type: 'string', example: '5.99'),
+                    new OA\Property(property: 'category', type: 'int', example: 1),
+                    new OA\Property(property: 'dated_at', type: 'datetime', example: '2023-07-01 12:45')
+                ]
+            )
         ),
         OA\Response(
             response: Response::HTTP_OK,
