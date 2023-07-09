@@ -11,6 +11,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: WalletRepository::class)]
 #[ORM\HasLifecycleCallbacks]
@@ -26,14 +27,41 @@ class Wallet implements EntityInterface
 
     #[ORM\ManyToOne(inversedBy: 'wallets')]
     #[Groups(['wallet:get', 'wallet:create'])]
+    #[
+        Assert\NotNull(
+            message: 'User is required.',
+            groups: ['wallet:create']
+        )
+    ]
     private ?User $user = null;
 
     #[ORM\Column(length: 255)]
     #[Groups(['wallet:get', 'wallet:create', 'wallet:update'])]
+    #[
+        Assert\NotNull(
+            message: 'Name is required.',
+            groups: ['wallet:create']
+        ),
+        Assert\NotBlank(
+            message: 'Name is required.',
+            groups: ['wallet:create']
+        )
+    ]
     private ?string $name = null;
 
     #[ORM\Column(type: Types::DECIMAL, precision: 65, scale: 2)]
     #[Groups(['wallet:get', 'wallet:create'])]
+    #[
+        Assert\Type(
+            type: 'digit',
+            message: 'Balance is not a valid decimal number.',
+            groups: ['wallet:create']
+        ),
+        Assert\PositiveOrZero(
+            message: 'Balance should be either positive or zero.',
+            groups: ['wallet:create']
+        )
+    ]
     private ?string $balance = '0.00';
 
     #[ORM\OneToMany(mappedBy: 'wallet', targetEntity: CashFlow::class, orphanRemoval: true)]
@@ -42,11 +70,23 @@ class Wallet implements EntityInterface
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
     #[Groups(['wallet:get', 'wallet:create', 'wallet:update'])]
+    #[
+        Assert\NotNull(
+            message: 'Currency is required.',
+            groups: ['wallet:create', 'wallet:update']
+        )
+    ]
     private ?Currency $currency = null;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
     #[Groups(['wallet:get', 'wallet:create', 'wallet:update'])]
+    #[
+        Assert\NotNull(
+            message: 'Wallet Type is required.',
+            groups: ['wallet:create', 'wallet:update']
+        )
+    ]
     private ?WalletType $type = null;
 
     public function __construct()
