@@ -84,7 +84,7 @@ class CashFlow implements EntityInterface
     #[Groups(['cash_flow:get', 'cash_flow:create'])]
     #[
         Assert\NotNull(
-            message: 'Wallet is required.',
+            message: 'Category is required.',
             groups: ['cash_flow:create']
         )
     ]

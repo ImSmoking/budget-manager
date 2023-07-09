@@ -15,14 +15,14 @@ class WalletFixtures extends Fixture implements DependentFixtureInterface
             'currency_ref' => 'currency_USD',
             'type_ref' => 'wallet_type_bank_account',
             'name' => 'USD Account',
-            'balance' => '150450000'
+            'balance' => '150000'
         ],
         [
             'user_ref' => 'user_batman@dc.com',
             'currency_ref' => 'currency_GBP',
             'type_ref' => 'wallet_type_bank_account',
             'name' => 'GBP Account',
-            'balance' => '28900000'
+            'balance' => '289000'
         ],
         [
             'user_ref' => 'user_spider.man@mc.com',
@@ -43,28 +43,28 @@ class WalletFixtures extends Fixture implements DependentFixtureInterface
             'currency_ref' => 'currency_USD',
             'type_ref' => 'wallet_type_bank_account',
             'name' => 'Bank Account',
-            'balance' => '15980.90'
+            'balance' => '16000'
         ],
         [
             'user_ref' => 'user_superman@dc.com',
             'currency_ref' => 'currency_USD',
             'type_ref' => 'wallet_type_cash',
             'name' => 'Cash',
-            'balance' => '560.10'
+            'balance' => '560'
         ],
         [
             'user_ref' => 'user_iron.man@mc.com',
             'currency_ref' => 'currency_USD',
             'type_ref' => 'wallet_type_bank_account',
             'name' => 'USD Account',
-            'balance' => '19088900.10'
+            'balance' => '190000'
         ],
         [
             'user_ref' => 'user_iron.man@mc.com',
             'currency_ref' => 'currency_CHF',
             'type_ref' => 'wallet_type_bank_account',
             'name' => 'CHF Account',
-            'balance' => '15009909.99'
+            'balance' => '120000'
         ]
     ];
 

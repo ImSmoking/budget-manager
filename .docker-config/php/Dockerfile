@@ -25,6 +25,7 @@ RUN docker-php-ext-configure intl
 RUN docker-php-ext-install intl
 RUN docker-php-ext-install zip
 RUN docker-php-ext-install pdo_mysql
+RUN docker-php-ext-install bcmath
 
 RUN pecl install xdebug-3.2.1 redis-5.3.7 && docker-php-ext-enable xdebug redis
 
