@@ -29,7 +29,7 @@ class Wallet implements EntityInterface
     private ?User $user = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['wallet:get', 'wallet:create'])]
+    #[Groups(['wallet:get', 'wallet:create', 'wallet:update'])]
     private ?string $name = null;
 
     #[ORM\Column(type: Types::DECIMAL, precision: 65, scale: 2)]
@@ -41,12 +41,12 @@ class Wallet implements EntityInterface
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['wallet:get', 'wallet:create'])]
+    #[Groups(['wallet:get', 'wallet:create', 'wallet:update'])]
     private ?Currency $currency = null;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['wallet:get', 'wallet:create'])]
+    #[Groups(['wallet:get', 'wallet:create', 'wallet:update'])]
     private ?WalletType $type = null;
 
     public function __construct()

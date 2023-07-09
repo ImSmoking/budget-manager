@@ -6,23 +6,15 @@ namespace App\Service;
 
 use App\Entity\Wallet;
 use App\Factory\EntityFactory;
-use App\Form\WalletType;
-use App\Repository\CurrencyRepository;
-use App\Repository\UserRepository;
 use App\Repository\WalletRepository;
-use App\Repository\WalletTypeRepository;
-use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 
 class WalletCrudService
 {
     public function __construct(
-        private readonly EntityFactory        $entityFactory,
-        private readonly WalletRepository     $walletRepository,
-        private readonly UserRepository       $userRepository,
-        private readonly WalletTypeRepository $walletTypeRepository,
-        private readonly CurrencyRepository $currencyRepository,
-        private readonly FormFactoryInterface $formFactory
+        private readonly WalletRepository $walletRepository,
+        private readonly EntityFactory    $entityFactory
     )
     {
     }
@@ -30,20 +22,28 @@ class WalletCrudService
     public function createFromRequest(Request $request): Wallet
     {
         $contentJson = $request->getContent();
-        $contentArray = json_decode($contentJson, true);
-
-        $form = $this->formFactory->create(WalletType::class, new Wallet());
-        $form->submit($contentArray);
-        /** @var Wallet $object */
-        $wallet = $form->getData();
-        
         /** @var Wallet $wallet */
-#        $wallet = $this->entityFactory->createFromJson($contentJson, Wallet::class, ['wallet:create']);
-#        $currency = $this->getCurrency($contentArray['currency']['id']);
-
-
+        $wallet = $this->entityFactory->createFromJson($contentJson, Wallet::class, ['wallet:create']);
         $this->walletRepository->save($wallet, true);
 
         return $wallet;
+    }
+
+    public function updateFromRequest(Wallet $wallet, Request $request): Wallet
+    {
+        $jsonContent = $request->getContent();
+        $groups = ['wallet:update'];
+        $context = [AbstractNormalizer::OBJECT_TO_POPULATE => $wallet];
+
+        /** @var Wallet $walletUpdated */
+        $walletUpdated = $this->entityFactory->createFromJson($jsonContent, Wallet::class, $groups, $context);
+        $this->walletRepository->save($walletUpdated, true);
+
+        return $walletUpdated;
+    }
+
+    public function delete(Wallet $wallet): void
+    {
+        $this->walletRepository->remove($wallet, true);
     }
 }

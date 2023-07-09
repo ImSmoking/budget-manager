@@ -15,7 +15,7 @@ class WalletType implements EntityInterface
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['wallet-type:get', 'wallet:get', 'wallet:create'])]
+    #[Groups(['wallet-type:get', 'wallet:get'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]

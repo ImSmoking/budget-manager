@@ -17,7 +17,7 @@ class Currency implements EntityInterface
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['currency:get', 'wallet:get', 'wallet:create'])]
+    #[Groups(['currency:get', 'wallet:get'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]

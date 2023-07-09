@@ -59,6 +59,37 @@ class WalletController extends ApiController
         return $this->getJsonResponse($wallet, ['groups' => ['wallet:get']], Response::HTTP_CREATED);
     }
 
+    #[Route('/update/{id}', name: 'update', methods: ['PUT'])]
+    #[
+        OA\Put(summary: "Update Wallet", tags: ['Wallet']),
+        OA\RequestBody(
+            description: "Single Wallet JSON item",
+            required: true,
+            content: new Model(type: Wallet::class, groups: ['wallet:update'])
+        ),
+        OA\Response(
+            response: Response::HTTP_OK,
+            description: "Update Wallet JSON item",
+            content: new OA\JsonContent(
+                properties: [
+                    new OA\Property(
+                        property: 'data',
+                        ref: new Model(type: Wallet::class, groups: ['wallet:get']),
+                        type: 'object'
+                    )
+                ]
+            )
+        )
+    ]
+    public function updateAction(
+        Wallet  $wallet,
+        Request $request
+    ): JsonResponse
+    {
+        $wallet = $this->walletCrudService->updateFromRequest($wallet, $request);
+        return $this->getJsonResponse($wallet, ['groups' => ['wallet:get']]);
+    }
+
     #[Route('/get/{id}', name: 'get', requirements: ['id' => Requirement::DIGITS], methods: ['GET'])]
     #[
         OA\Get(summary: "Wallet by ID", tags: ['Wallet']),
@@ -102,5 +133,19 @@ class WalletController extends ApiController
     {
         $wallet = $walletRepository->findAll();
         return $this->getJsonResponse($wallet, ['groups' => ['wallet:get']]);
+    }
+
+    #[Route('/delete/{id}', name: 'delete', methods: ['DELETE'])]
+    #[
+        OA\Delete(summary: "Wallet by ID", tags: ['Wallet']),
+        OA\Response(
+            response: Response::HTTP_NO_CONTENT,
+            description: "204 No Content"
+        )
+    ]
+    public function deleteAction(Wallet $wallet): JsonResponse
+    {
+        $this->walletCrudService->delete($wallet);
+        return $this->getJsonResponse([], [], Response::HTTP_NO_CONTENT);
     }
 }

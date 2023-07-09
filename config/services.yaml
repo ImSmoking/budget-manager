@@ -26,3 +26,11 @@ services:
 
     App\EventListener\ExceptionListener:
         tags: [kernel.event_listener]
+
+
+    App\Normalizer\EntityNormalizer:
+        public: false
+        autowire: true
+        autoconfigure: true
+        tags:
+            - { name: serializer.normalizer }
