@@ -15,11 +15,11 @@ class WalletType implements EntityInterface
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['wallet-type:get'])]
+    #[Groups(['wallet-type:get', 'wallet:get', 'wallet:create'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['wallet-type:get'])]
+    #[Groups(['wallet-type:get', 'wallet:get'])]
     #[
         Assert\NotNull(
             message: 'Name is required.'

@@ -10,8 +10,10 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: WalletRepository::class)]
+#[ORM\HasLifecycleCallbacks]
 class Wallet implements EntityInterface
 {
     use TimestampTrait;
@@ -19,26 +21,32 @@ class Wallet implements EntityInterface
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['wallet:get'])]
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'wallets')]
+    #[Groups(['wallet:get', 'wallet:create'])]
     private ?User $user = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['wallet:get', 'wallet:create'])]
     private ?string $name = null;
 
     #[ORM\Column(type: Types::DECIMAL, precision: 65, scale: 2)]
-    private ?string $balance = null;
+    #[Groups(['wallet:get', 'wallet:create'])]
+    private ?string $balance = '0.00';
 
     #[ORM\OneToMany(mappedBy: 'wallet', targetEntity: CashFlow::class, orphanRemoval: true)]
     private Collection $cashFlows;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['wallet:get', 'wallet:create'])]
     private ?Currency $currency = null;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['wallet:get', 'wallet:create'])]
     private ?WalletType $type = null;
 
     public function __construct()

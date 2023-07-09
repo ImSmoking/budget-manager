@@ -22,6 +22,16 @@ class UserFixtures extends Fixture
             'email' => 'superman@dc.com',
             'password' => 'Password12345!'
         ],
+        [
+            'username' => 'Spider.Man',
+            'email' => 'spider.man@mc.com',
+            'password' => 'Password12345!'
+        ],
+        [
+            'username' => 'Iron.Man',
+            'email' => 'iron.man@mc.com',
+            'password' => 'Password12345!'
+        ],
     ];
 
     public function __construct(
@@ -41,6 +51,7 @@ class UserFixtures extends Fixture
             $user->setPassword($hashedPassword);
 
             $manager->persist($user);
+            $this->addReference('user_' . $fixture['email'], $user);
         }
 
         $manager->flush();

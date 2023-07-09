@@ -36,6 +36,7 @@ class CurrencyFixtures extends Fixture
                 ->setCode($fixture['code']);
 
             $manager->persist($currency);
+            $this->addReference('currency_' . $fixture['code'], $currency);
         }
         $manager->flush();
     }

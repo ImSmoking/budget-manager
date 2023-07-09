@@ -17,11 +17,11 @@ class Currency implements EntityInterface
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['currency:get'])]
+    #[Groups(['currency:get', 'wallet:get', 'wallet:create'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['currency:get'])]
+    #[Groups(['currency:get', 'wallet:get'])]
     #[
         Assert\NotNull(
             message: 'Name is required.',
@@ -35,7 +35,7 @@ class Currency implements EntityInterface
     private ?string $name = null;
 
     #[ORM\Column(length: 3, unique: true)]
-    #[Groups(['currency:get'])]
+    #[Groups(['currency:get', 'wallet:get'])]
     #[
         Assert\NotNull(
             message: 'Code is required.',

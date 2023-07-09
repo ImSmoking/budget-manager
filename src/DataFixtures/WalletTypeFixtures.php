@@ -13,12 +13,15 @@ class WalletTypeFixtures extends Fixture
     private array $fixtures = [
         [
             'name' => 'Cash',
+            'fixture_reference' => 'wallet_type_cash'
         ],
         [
             'name' => 'Bank Account',
+            'fixture_reference' => 'wallet_type_bank_account'
         ],
         [
             'name' => 'Credit Card',
+            'fixture_reference' => 'wallet_type_credit_card'
         ]
     ];
 
@@ -29,6 +32,7 @@ class WalletTypeFixtures extends Fixture
                 ->setName($fixture['name']);
 
             $manager->persist($walletType);
+            $this->addReference($fixture['fixture_reference'], $walletType);
         }
         $manager->flush();
     }

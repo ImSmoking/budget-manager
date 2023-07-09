@@ -27,10 +27,11 @@ class User implements EntityInterface, UserInterface, PasswordAuthenticatedUserI
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['user:register', 'user:login', 'user:get', 'wallet:get', 'wallet:create'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 180, unique: true)]
-    #[Groups(['user:register', 'user:login', 'user:get'])]
+    #[Groups(['user:register', 'user:login', 'user:get', 'wallet:get'])]
     #[
         Assert\NotNull(
             message: 'Username is required.',
@@ -44,7 +45,7 @@ class User implements EntityInterface, UserInterface, PasswordAuthenticatedUserI
     private ?string $username = null;
 
     #[ORM\Column(length: 180, unique: true)]
-    #[Groups(['user:register', 'user:get'])]
+    #[Groups(['user:register', 'user:get', 'wallet:get'])]
     #[
         Assert\Email(
             message: 'Provided email {{ value }} is not a valid email.',
