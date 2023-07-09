@@ -8,8 +8,10 @@ use App\Repository\CashFlowRepository;
 use App\Trait\TimestampTrait;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: CashFlowRepository::class)]
+#[ORM\HasLifecycleCallbacks]
 class CashFlow implements EntityInterface
 {
     use TimestampTrait;
@@ -17,26 +19,33 @@ class CashFlow implements EntityInterface
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['cash_flow:get'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 10)]
+    #[Groups(['cash_flow:get', 'cash_flow:create'])]
     private ?string $type = null;
 
     #[ORM\ManyToOne(inversedBy: 'cashFlows')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['cash_flow:get', 'cash_flow:create'])]
     private ?Wallet $wallet = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[Groups(['cash_flow:get', 'cash_flow:create'])]
     private ?string $description = null;
 
     #[ORM\Column(type: Types::DECIMAL, precision: 65, scale: 2)]
+    #[Groups(['cash_flow:get', 'cash_flow:create'])]
     private ?string $amount = null;
 
     #[ORM\ManyToOne()]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['cash_flow:get', 'cash_flow:create'])]
     private ?Category $category = null;
 
     #[ORM\Column]
+    #[Groups(['cash_flow:get', 'cash_flow:create'])]
     private ?\DateTimeImmutable $datedAt = null;
 
     public function getId(): ?int
