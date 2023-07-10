@@ -63,3 +63,8 @@ Before they can be run the test database needs to be set up which can be done by
 `docker-compose exec php bin/console --env=test doctrine:fixtures:load --quiet`  
 
 Once that is done the tests can be run using the `docker-compose exec php composer run-tests` composer script.
+
+
+### Important note
+ Loading data with Doctrine fixtures and updating entities with schema update command should only bee run in dev env.
+ Use Doctrine migration for adding changes that should also apply on production.
