@@ -9,6 +9,7 @@ use App\Repository\UserRepository;
 use App\Trait\TimestampTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -91,6 +92,12 @@ class User implements EntityInterface, UserInterface, PasswordAuthenticatedUserI
 
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Wallet::class)]
     private Collection $wallets;
+
+    #[ORM\Column( type: Types::TEXT, nullable: true)]
+    private ?string $accessToken = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?\DateTimeImmutable $accessTokenCreatedAt = null;
 
     public function __construct()
     {
@@ -227,6 +234,30 @@ class User implements EntityInterface, UserInterface, PasswordAuthenticatedUserI
                 $wallet->setUser(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getAccessToken(): ?string
+    {
+        return $this->accessToken;
+    }
+
+    public function setAccessToken(?string $accessToken): static
+    {
+        $this->accessToken = $accessToken;
+
+        return $this;
+    }
+
+    public function getAccessTokenCreatedAt(): ?\DateTimeImmutable
+    {
+        return $this->accessTokenCreatedAt;
+    }
+
+    public function setAccessTokenCreatedAt(?\DateTimeImmutable $accessTokenCreatedAt): static
+    {
+        $this->accessTokenCreatedAt = $accessTokenCreatedAt;
 
         return $this;
     }
